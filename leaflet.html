@@ -11,7 +11,8 @@
    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
    crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-simple-map-screenshoter"></script>
-    <script src="https://unpkg.com/file-saver@2.0.0-rc.2/dist/FileSaver.min.js"></script>
+    <script src="https://unpkg.com/file-saver/dist/FileSaver.js"></script>
+
 
     <style>
       #leaflet-map { height: 80%; }
@@ -56,17 +57,25 @@ let pluginOptions = {
 
 this.simpleMapScreenshoter = L.simpleMapScreenshoter(pluginOptions).addTo(this.map)
 let format = 'blob' // 'image' - return base64, 'canvas' - return canvas
-let overridedPluginOptions = {
-  mimeType: 'image/jpeg'
-}
-function screen() {
-  this.simpleMapScreenshoter.takeScreen(format, overridedPluginOptions).then(blob => {
+
+async function takeMapScreenshot(name) {
+  await this.simpleMapScreenshoter.takeScreen(format).then(blob => {
     console.log(blob);
-    document.getElementById("image").src = window.URL.createObjectURL(blob);
-    // FileSaver.saveAs(blob, 'screen.png')
+    saveAs(blob, name + '.png')
   }).catch(e => {
     console.error(e)
   })
+}
+
+async function saveAllEcoBlocks() {
+  geolayers = [];
+  geojson.eachLayer(function(layer){
+    geolayers.push(layer)
+  })
+  for (i =0; i < geolayers.length; i++) {
+    await map.fitBounds(geolayers[i].getBounds(), {padding: [50, 50]});
+    await takeMapScreenshot(i);
+  }
 }
 
 // Add colors to data
@@ -123,6 +132,7 @@ $( document ).ready(function() {
     style: style, 
     onEachFeature: onEachFeature
   }).addTo(map);
+
 });
     </script>
   </body>
