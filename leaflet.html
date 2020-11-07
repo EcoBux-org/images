@@ -2,7 +2,7 @@
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <!-- Leaflet-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
@@ -15,15 +15,15 @@
 
 
     <style>
-      #leaflet-map { height: 80%; }
+      #leaflet-map { height: 100%; }
     </style>
     <script src="mamoni.js"></script>
   </head>
   <body>
       <div id="leaflet-map"></div>
       <img id=image \>
-    <script>
-var map = L.map('leaflet-map').setView([9.315056, -79.134224], 18); 
+      <script>
+        var map = L.map('leaflet-map').setView([9.315056, -79.134224], 18); 
 
 // var mapboxAccessToken = "pk.eyJ1IjoibHVjYXNvYmUiLCJhIjoiY2p5cWdqeTI2MDA1YzNpcjNkdHkya3BieCJ9.1sPGdqMODcBf8w8gG0-KRw";
 // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -39,20 +39,20 @@ L.control.scale().addTo(map);
 
 
 let pluginOptions = {
-   cropImageByInnerWH: true, // crop blank opacity from image borders
-   hidden: false, // hide screen icon
-   preventDownload: false, // prevent download on button click
-   domtoimageOptions: {}, // see options for dom-to-image
-   position: 'topleft', // position of take screen icon
-   screenName: 'screen', // string or function
-   hideElementsWithSelectors: ['.leaflet-control-container'], // by default hide map controls All els must be child of _map._container
-   mimeType: 'image/png', // used if format == image,
-   caption: null, // string or function, added caption to bottom of screen
-   captionFontSize: 15,
-   captionFont: 'Arial',
-   captionColor: 'black',
-   captionBgColor: 'white',
-   captionOffset: 5,
+  cropImageByInnerWH: true, // crop blank opacity from image borders
+  hidden: false, // hide screen icon
+  preventDownload: false, // prevent download on button click
+  domtoimageOptions: {}, // see options for dom-to-image
+  position: 'topleft', // position of take screen icon
+  screenName: 'screen', // string or function
+  hideElementsWithSelectors: ['.leaflet-control-container'], // by default hide map controls All els must be child of _map._container
+  mimeType: 'image/png', // used if format == image,
+  caption: null, // string or function, added caption to bottom of screen
+  captionFontSize: 15,
+  captionFont: 'Arial',
+  captionColor: 'black',
+  captionBgColor: 'white',
+  captionOffset: 5,
 }
 
 this.simpleMapScreenshoter = L.simpleMapScreenshoter(pluginOptions).addTo(this.map)
@@ -62,9 +62,14 @@ async function takeMapScreenshot(name) {
   await this.simpleMapScreenshoter.takeScreen(format).then(blob => {
     console.log(blob);
     saveAs(blob, name + '.png')
+    return
   }).catch(e => {
     console.error(e)
   })
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function saveAllEcoBlocks() {
@@ -73,67 +78,69 @@ async function saveAllEcoBlocks() {
     geolayers.push(layer)
   })
   for (i =0; i < geolayers.length; i++) {
-    await map.fitBounds(geolayers[i].getBounds(), {padding: [50, 50]});
+    await map.fitBounds(geolayers[i].getBounds(), {padding: [100, 100]});
+    await sleep(5000);
     await takeMapScreenshot(i);
   }
 }
 
 // Add colors to data
 function getColor(d) {
-    return d==0 ? '#7C7E82' : 
-           d==1 ? '#020506' :
-           d==2 ? '#F8F8F8' :
-                  '#931621';console.log('Error in the owned allotments!')
+  return d==0 ? '#7C7E82' : 
+    d==1 ? '#020506' :
+    d==2 ? '#F8F8F8' :
+    '#931621';console.log('Error in the owned allotments!')
 }
 // Add opacity to data
 function getOpacity(d) {
-    return d==0 ? '0.5' : 
-           d==1 ? '0.35' :
-           d==2 ? '0.15' :
-                  '1';console.log('Error in the owned allotments!')
+  return d==0 ? '0.5' : 
+    d==1 ? '0.35' :
+    d==2 ? '0.15' :
+    '1';console.log('Error in the owned allotments!')
 }
 function ownedStyle(owned) {
-    return {
-        fillColor: '#292B2E',
-        weight: 1,
-        opacity: 0.5,
-        color: getColor(owned),
-        dashArray: '',
-        fillOpacity: getOpacity(owned) 
-    };
+  return {
+    fillColor: '#292B2E',
+    weight: 1,
+    opacity: 0.5,
+    color: getColor(owned),
+    dashArray: '',
+    fillOpacity: getOpacity(owned) 
+  };
 }
 function style(feature) {
-    return ownedStyle(feature.properties.owned);
+  return ownedStyle(feature.properties.owned);
 }
 function zoomToFeature(e) {
-    console.log(e.target.getBounds())
-    map.fitBounds(e.target.getBounds(), {padding: [50, 50]});
+  console.log(e.target.getBounds())
+  console.log(e.target.feature.properties.POLY_ID)
+  map.fitBounds(e.target.getBounds(), {padding: [50, 50]});
 }
 
 function style(feature) {
-    return ownedStyle(feature.properties.owned);
+  return ownedStyle(feature.properties.owned);
 }
 
 function onEachFeature(feature, layer) {
-    layer.on({
-        click: zoomToFeature
-    });
+  layer.on({
+    click: zoomToFeature
+  });
 }
 
 $( document ).ready(function() {
-  var imageUrl = 'trees2.jpg';
+  var imageUrl = 'Elitrees.png';
   var imageBounds = [
-    [9.3141992, -79.1344787], 
+    [9.3140992, -79.1344787], 
     [9.3156039, -79.1317406]
   ];
 
-  L.imageOverlay(imageUrl, imageBounds).addTo(map);
+  imageMap = L.imageOverlay(imageUrl, imageBounds).addTo(map);
   geojson = L.geoJson(mamoniData, {
     style: style, 
     onEachFeature: onEachFeature
   }).addTo(map);
 
 });
-    </script>
+      </script>
   </body>
 </html>

@@ -1,0 +1,17 @@
+{
+  "name": "images",
+  "version": "1.0.0",
+  "description": "",
+  "main": "auto.js",
+  "dependencies": {
+    "leaflet-simple-map-screenshoter": "^0.4.1",
+    "local-web-server": "^4.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
