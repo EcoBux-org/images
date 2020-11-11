@@ -23,17 +23,12 @@
       <div id="leaflet-map"></div>
       <img id=image \>
       <script>
-        var map = L.map('leaflet-map').setView([9.315056, -79.134224], 18); 
+        var map = L.map('leaflet-map').setView([9.315056, -79.134224], 19); 
 
-// var mapboxAccessToken = "pk.eyJ1IjoibHVjYXNvYmUiLCJhIjoiY2p5cWdqeTI2MDA1YzNpcjNkdHkya3BieCJ9.1sPGdqMODcBf8w8gG0-KRw";
-// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     id: 'mapbox.light',
-//     maxZoom: 30,
-//     attribution: 'Map data &copy; ' +
-//       '<a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-//       '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-//       'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-// }).addTo(map);
+L.tileLayer('Mapnik/{z}/{x}/{y}.png', {
+  id: 'mapbox.light',
+  maxZoom: 24,
+}).addTo(map);
 
 L.control.scale().addTo(map);
 
@@ -128,13 +123,13 @@ function onEachFeature(feature, layer) {
 }
 
 $( document ).ready(function() {
-  var imageUrl = 'Elitrees.png';
+  /* var imageUrl = 'trees2.jpg';
   var imageBounds = [
-    [9.3140992, -79.1344787], 
-    [9.3156039, -79.1317406]
+    [9.3159539, -79.1312506], 
+    [9.3138392, -79.1347787]
   ];
-
   imageMap = L.imageOverlay(imageUrl, imageBounds).addTo(map);
+  */
   geojson = L.geoJson(mamoniData, {
     style: style, 
     onEachFeature: onEachFeature
