@@ -15,7 +15,7 @@
 
 
     <style>
-      #leaflet-map { height: 100%; }
+      #leaflet-map { width: 1200px; height: 1200px}
     </style>
     <script src="mamoni.js"></script>
   </head>
@@ -25,7 +25,7 @@
       <script>
         var map = L.map('leaflet-map').setView([9.315056, -79.134224], 19); 
 
-L.tileLayer('Mapnik/{z}/{x}/{y}.png', {
+L.tileLayer('tiles/{z}/{x}/{y}.png', {
   id: 'mapbox.light',
   maxZoom: 24,
 }).addTo(map);
@@ -74,8 +74,10 @@ async function saveAllEcoBlocks() {
   })
   for (i =0; i < geolayers.length; i++) {
     await map.fitBounds(geolayers[i].getBounds(), {padding: [100, 100]});
-    await sleep(5000);
+    await geolayers[i].setStyle({fillColor:"#FFF", opacity:1})
+    await sleep(2000)
     await takeMapScreenshot(i);
+    await geolayers[i].setStyle({fillColor:"#292B2E", opacity:0})
   }
 }
 
@@ -110,10 +112,6 @@ function zoomToFeature(e) {
   console.log(e.target.getBounds())
   console.log(e.target.feature.properties.POLY_ID)
   map.fitBounds(e.target.getBounds(), {padding: [50, 50]});
-}
-
-function style(feature) {
-  return ownedStyle(feature.properties.owned);
 }
 
 function onEachFeature(feature, layer) {
