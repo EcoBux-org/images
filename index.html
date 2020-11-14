@@ -83,26 +83,17 @@ async function saveAllEcoBlocks() {
 
 // Add colors to data
 function getColor(d) {
-  return d==0 ? '#7C7E82' : 
-    d==1 ? '#020506' :
+  return d==0 ? '#000' : 
+    d==1 ? '#7C7E82' :
     d==2 ? '#F8F8F8' :
     '#931621';console.log('Error in the owned allotments!')
 }
-// Add opacity to data
-function getOpacity(d) {
-  return d==0 ? '0.5' : 
-    d==1 ? '0.35' :
-    d==2 ? '0.15' :
-    '1';console.log('Error in the owned allotments!')
-}
 function ownedStyle(owned) {
   return {
-    fillColor: '#292B2E',
-    weight: 1,
-    opacity: 0.5,
+    opacity: 0.3,
     color: getColor(owned),
     dashArray: '',
-    fillOpacity: getOpacity(owned) 
+    fill: 0,
   };
 }
 function style(feature) {
