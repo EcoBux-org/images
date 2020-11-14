@@ -25,7 +25,7 @@
       <script>
         var map = L.map('leaflet-map').setView([9.315056, -79.134224], 19); 
 
-L.tileLayer('tiles/{z}/{x}/{y}.png', {
+L.tileLayer('https://dgmmotmihcei1.cloudfront.net/Mapnik/{z}/{x}/{y}.png', {
   id: 'mapbox.light',
   maxZoom: 24,
 }).addTo(map);
